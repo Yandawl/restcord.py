@@ -2,7 +2,7 @@
 """
 The MIT License (MIT)
 
-Copyright (c) 2015-2020 Rapptz
+Copyright (c) 2015-2020 Lethys
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),
@@ -30,37 +30,19 @@ import logging
 import sys
 from typing import Optional
 from urllib.parse import quote as _uriquote
-from weakref import WeakValueDictionary
 
 import aiohttp
 from aiohttp import ClientSession
 
 from . import __version__
-from .errors import Forbidden, HTTPException, NotFound
+from .errors import BadGateway, Forbidden, HTTPException, InternalServerError, NotFound, RateLimited
 
 __log__ = logging.getLogger(__name__)
 
 __all__ = (
-    'Unlockable',
     'Route',
     'HTTPClient'
 )
-
-class Unlockable:
-
-    def __init__(self, lock):
-        self.lock = lock
-        self._unlock = True
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, type, value, traceback):
-        if self._unlock:
-            self.lock.release()
-
-    def defer(self):
-        self._unlock = False
 
 class Route:
 
@@ -82,19 +64,15 @@ class Route:
     def bucket(self):
         return f'{self.channel_id}:{self.guild_id}:{self.path}'
 
-
 class HTTPClient:
 
-    __slots__ = ('token', 'loop', 'proxy', 'proxy_auth', '__locks', '__global_over', '__session', '__agent')
+    __slots__ = ('token', 'loop', 'proxy', 'proxy_auth', '__session', '__agent')
 
     def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession]=None) -> None:
         self.token = token
         self.loop = asyncio.get_event_loop() if loop is None else loop
         self.proxy = proxy
         self.proxy_auth = proxy_auth
-        self.__locks = WeakValueDictionary()
-        self.__global_over = asyncio.Event()
-        self.__global_over.set()
         self.__session = session
         self.__agent = f'RestCord.py (https://github.com/Yandawl/restcord.py {__version__}) Python/{sys.version_info[0]}.{sys.version_info[1]} aiohttp/{aiohttp.__version__}'
 
@@ -114,12 +92,6 @@ class HTTPClient:
         method = route.method
         url = route.url
 
-        lock = self.__locks.get(bucket)
-        if lock is None:
-            lock = asyncio.Lock()
-            if bucket is not None:
-                self.__locks[bucket] = lock
-
         kwargs['headers'] = {
             'User-Agent': self.__agent,
             'X-Ratelimit-Precision': 'millisecond',
@@ -136,62 +108,43 @@ class HTTPClient:
         if self.proxy_auth is not None:
             kwargs['proxy_auth'] = self.proxy_auth
 
-        if not self.__global_over.is_set():
-            await self.__global_over.wait()
+        async with self.session.request(method, url, **kwargs) as r:
+            __log__.debug(f'{method} {url} with {kwargs.get("data")} has returned {r.status}')
 
-        await lock.acquire()
+            data = await self.__get_data(r)
 
-        with Unlockable(lock) as unlockable:
-            for tries in range(5):
+            remaining = r.headers.get('X-Ratelimit-Remaining')
+            if remaining == '0' and r.status != 429:
+                __log__.debug(f'A rate limit bucket has been exhausted (bucket: {bucket}, retry: {self.__parse_ratelimit_header(r)}).')
 
-                async with self.session.request(method, url, **kwargs) as r:
-                    __log__.debug('%s %s with %s has returned %s', method, url, kwargs.get('data'), r.status)
+            if 300 > r.status >= 200:
+                __log__.debug(f'{method} {url} has received {data}')
+                return data
 
-                    data = await self.__get_data(r)
+            if r.status == 429:
+                if not r.headers.get('Via'):
+                    raise Exception()
 
-                    remaining = r.headers.get('X-Ratelimit-Remaining')
-                    if remaining == '0' and r.status != 429:
-                        delta = self.__parse_ratelimit_header(r)
-                        __log__.debug('A rate limit bucket has been exhausted (bucket: %s, retry: %s).', bucket, delta)
-                        unlockable.defer()
-                        self.loop.call_later(delta, lock.release)
+                retry_after = data['retry_after'] / 1000.0
+                is_global = data.get('global', False)
+                if is_global:
+                    __log__.warning(f'Global rate limit has been hit. Retry in {retry_after:.2f} seconds.')
+                else:
+                    __log__.warning(f'Rate limit hit. Retry in {retry_after:.2f} seconds. Handled under the bucket {bucket}')
 
-                    if 300 > r.status >= 200:
-                        __log__.debug('%s %s has received %s', method, url, data)
-                        return data
-                    
-                    if r.status == 429:
-                        if not r.headers.get('Via'):
-                            raise Exception()
+                raise RateLimited(r, data)
 
-                        fmt = 'We are being rate limited. Retrying in %.2f seconds. Handled under the bucket "%s"'
+            if r.status == 403:
+                raise Forbidden(r, data)
 
-                        retry_after = data['retry_after'] / 1000.0
-                        __log__.warning(fmt, retry_after, bucket)
+            if r.status == 404:
+                raise NotFound(r, data)
 
-                        is_global = data.get('global', False)
-                        if is_global:
-                            __log__.warning('Global rate limit has been hit. Retrying in %.2f seconds.', retry_after)
-                            self.__global_over.clear()
+            if r.status == 500:
+                raise InternalServerError(r, data)
 
-                        await asyncio.sleep(retry_after)
-                        __log__.debug('Done sleeping for the rate limit. Retrying...')
-
-                        if is_global:
-                            self.__global_over.set()
-                            __log__.debug('Global rate limit is now over.')
-                        continue
-
-                    if r.status in [500, 502]:
-                        await asyncio.sleep(1 + tries * 2)
-                        continue
-                
-                    if r.status == 403:
-                        raise Forbidden(r, data)
-                    elif r.status == 404:
-                        raise NotFound(r, data)
-                    else:
-                        raise HTTPException(r, data)
+            if r.status == 502:
+                raise BadGateway(r, data)
 
             raise HTTPException(r, data)
 

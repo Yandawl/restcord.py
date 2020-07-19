@@ -81,14 +81,25 @@ class HTTPException(Exception):
 
 class Forbidden(HTTPException):
 
-    """Exception that's thrown for when status code 403 occurs.
-    Subclass of :exc:`HTTPException`
-    """
+    """Exception that's thrown for when status code 403 occurs."""
     pass
 
 class NotFound(HTTPException):
 
-    """Exception that's thrown for when status code 404 occurs.
-    Subclass of :exc:`HTTPException`
-    """
+    """Exception that's thrown for when status code 404 occurs."""
+    pass
+
+class RateLimited(HTTPException):
+
+    """Exception that's thrown for when status code 429 occurs."""
+    pass
+
+class InternalServerError(HTTPException):
+
+    """Exception that's thrown for when status code 500 occurs."""
+    pass
+
+class BadGateway(HTTPException):
+
+    """Exception that's thrown for when status code 403 occurs."""
     pass
