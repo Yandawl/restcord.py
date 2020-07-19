@@ -29,7 +29,7 @@ from typing import List, Optional
 from aiohttp import ClientSession
 
 from .http import HTTPClient, Route
-from .models import Channel, Guild, Member, Role
+from .models import Channel, Guild, Member, Role, User
 
 __log__ = logging.getLogger(__name__)
 
@@ -52,6 +52,29 @@ class RestCord(HTTPClient):
 
     def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession]=None) -> None:
         super().__init__(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
+
+    async def get_user(self, user_id: int) -> User:
+        """|coro|
+        Get a user.
+
+        Returns
+        ---------
+        Optional[:class:`User`]
+            The User or ``None`` if not found.
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/user#get-user
+
+        Parameters
+        ----------
+        user_id: :class:`int`
+            Discord's identifier for the user.
+        """
+        r = Route('GET', '/users/{user_id}', user_id=user_id)
+        user = await self._request(r)
+
+        return User(**user)
 
     async def get_guild(self, guild_id: int, with_counts=False) -> Guild:
         """|coro|
@@ -82,6 +105,38 @@ class RestCord(HTTPClient):
         guild = await self._request(r)
 
         return Guild(**guild)
+
+    async def get_member(self, guild_id: int, member_id: int) -> Member:
+        """|coro|
+        Get a guild's member.
+
+        Returns
+        ---------
+        Optional[:class:`Member`]
+            The Member or ``None`` if not found.
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/guild#get-guild-member
+
+        Parameters
+        ----------
+        guild_id: :class:`int`
+            Discord's identifier for the guild.
+        member_id: :class:`int`
+            Discord's identifier for the member.
+        """
+
+        if not guild_id:
+            raise ValueError("Argument cannot be None: guild_id")
+
+        if not member_id:
+            raise ValueError("Argument cannot be None: member_id")
+
+        r = Route('GET', '/guilds/{guild_id}/members/{member_id}', guild_id=guild_id, member_id=member_id)
+        member = await self._request(r)
+
+        return Member(**member)
 
     async def get_members(self, guild_id: int, limit: int=1, after_id: int=0) -> List[Member]:
         """|coro|
@@ -121,37 +176,32 @@ class RestCord(HTTPClient):
 
         return [Member(**member) for member in members]
 
-    async def get_member(self, guild_id: int, member_id: int) -> Member:
+    async def get_channel(self, channel_id: int) -> Channel:
         """|coro|
-        Get a guild's member.
+        Get a guild's channels.
 
         Returns
         ---------
-        Optional[:class:`Member`]
-            The Member or ``None`` if not found.
+        Optional[:class:`Channel`]
+            The Channel or ``None`` if not found.
 
         API Documentation
         ----------
-            https://discord.com/developers/docs/resources/guild#get-guild-member
+            https://discord.com/developers/docs/resources/channel#get-channel
 
         Parameters
         ----------
-        guild_id: :class:`int`
-            Discord's identifier for the guild.
-        member_id: :class:`int`
-            Discord's identifier for the member.
+        channel_id: :class:`int`
+            Discord's identifier for the channel.
         """
 
-        if not guild_id:
-            raise ValueError("Argument cannot be None: guild_id")
+        if not channel_id:
+            raise ValueError("Argument cannot be None: channel_id")
 
-        if not member_id:
-            raise ValueError("Argument cannot be None: member_id")
+        r = Route('GET', '/channels/{channel_id}', channel_id=channel_id)
+        channel = await self._request(r)
 
-        r = Route('GET', '/guilds/{guild_id}/members/{member_id}', guild_id=guild_id, member_id=member_id)
-        member = await self._request(r)
-
-        return Member(**member)
+        return Channel(**channel)
 
     async def get_channels(self, guild_id: int) -> List[Channel]:
         """|coro|
@@ -179,33 +229,6 @@ class RestCord(HTTPClient):
         channels = await self._request(r)
 
         return [Channel(**channel) for channel in channels]
-
-    async def get_channel(self, channel_id: int) -> Channel:
-        """|coro|
-        Get a guild's channels.
-
-        Returns
-        ---------
-        Optional[:class:`Channel`]
-            The Channel or ``None`` if not found.
-
-        API Documentation
-        ----------
-            https://discord.com/developers/docs/resources/guild#get-guild-roles
-
-        Parameters
-        ----------
-        channel_id: :class:`int`
-            Discord's identifier for the channel.
-        """
-
-        if not channel_id:
-            raise ValueError("Argument cannot be None: channel_id")
-
-        r = Route('GET', '/channels/{channel_id}', channel_id=channel_id)
-        channel = await self._request(r)
-
-        return Channel(**channel)
 
     async def get_roles(self, guild_id: int) -> List[Role]:
         """|coro|

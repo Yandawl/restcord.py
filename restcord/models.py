@@ -26,25 +26,26 @@ DEALINGS IN THE SOFTWARE.
 import json
 from abc import ABC
 
+from . import utils
+
 __all__ = (
-    'Designation',
+    'Snowflake',
     'Guild',
     'Channel',
     'Role',
     'Member'
 )
 
-class Designation(ABC):
+class Snowflake(ABC):
 
-    __slots__ = ('_raw', 'id', 'name')
+    __slots__ = ('_raw', 'id')
 
     def __init__(self, **kwargs):
         self._raw = kwargs
         self.id = kwargs.get('id')
-        self.name = kwargs.get('name')
 
     def __str__(self) -> str:
-        return f'<{type(self).__name__} id={self.id}, name={self.name}>'
+        return f'<{type(self).__name__} id={self.id}>'
 
     def __repr__(self) -> str:
         return self.__str__()
@@ -54,6 +55,32 @@ class Designation(ABC):
 
     def to_json(self):
         return json.dumps(self._raw, separators=(',', ':'), ensure_ascii=True)
+
+class Designation(Snowflake):
+
+    __slots__ = ('name')
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        self.name = kwargs.get('name')
+
+    def __str__(self) -> str:
+        return f'<{type(self).__name__} id={self.id}, name={self.name}>'
+
+class PermissionOverwrite(Snowflake):
+
+    __slots__ = ('type', 'allow', 'deny', 'allow_new', 'deny_new')
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        self.type = kwargs.get('type')
+        self.allow = kwargs.get('allow')
+        self.deny = kwargs.get('deny')
+        self.allow_new = kwargs.get('allow_new')
+        self.deny_new = kwargs.get('deny_new')
+
 
 class Emoji(Designation):
 
@@ -67,6 +94,13 @@ class Emoji(Designation):
         self.managed = kwargs.get('managed')
         self.animated = kwargs.get('animated')
         self.available = kwargs.get('available')
+
+    @property
+    def mention(self) -> str:
+        """:class:`str`: The emoji's mentionable string."""
+        if self.animated:
+            return f'<a:{self.name}:{self.id}>'
+        return f'<:{self.name}:{self.id}>'
 
 class Guild(Designation):
 
@@ -114,18 +148,29 @@ class Guild(Designation):
 
 class Channel(Designation):
 
-    __slots__ = ('type', 'position', 'permission_overwrites', 'parent_id')
+    __slots__ = ('guild_id', 'type', 'position', 'permission_overwrites', 'parent_id', 'last_message_id', 'last_pin_timestamp', 'topic', 'nsfw', 'permission_overwrites')
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+        self.guild_id = kwargs.get('guild_id')
         self.type = kwargs.get('type')
         self.position = kwargs.get('position')
         self.permission_overwrites = kwargs.get('permission_overwrites')
         self.parent_id = kwargs.get('parent_id')
+        self.last_message_id = kwargs.get('last_message_id')
+        self.last_pin_timestamp = kwargs.get('last_pin_timestamp')
+        self.topic = kwargs.get('topic')
+        self.nsfw = kwargs.get('nsfw')
+        self.permission_overwrites = [PermissionOverwrite(**p) for p in kwargs.get('permission_overwrites', [])]
 
     def __str__(self):
         return f'<{type(self).__name__} id={self.id}, name={self.name}, type={self.type}, position={self.position}>'
+
+    @property
+    def mention(self) -> str:
+        """:class:`str`: The channel's mentionable string."""
+        return f'<#{self.id}>'
 
 class Role(Designation):
 
@@ -142,25 +187,47 @@ class Role(Designation):
         self.mentionable = kwargs.get('mentionable')
         self.permissions_new = kwargs.get('permissions_new')
 
+    @property
+    def mention(self) -> str:
+        """:class:`str`: The role's mentionable string."""
+        return f'<@&{self.id}>'
+
 class User(Designation):
 
-    __slots__ = ('discriminator', 'avatar')
+    __slots__ = ('discriminator', 'avatar', 'public_flags')
 
     def __init__(self, **kwargs):
-        user = kwargs.get('user')
-
-        kwargs["id"] = user.get('id')
-        kwargs["name"] = user.get('username')
-
-        self.discriminator = user.get('discriminator')
-        self.avatar = user.get('avatar')
-
         super().__init__(**kwargs)
+
+        self.name = kwargs.get('username')
+        self.discriminator = kwargs.get('discriminator')
+        self.avatar = kwargs.get('avatar')
+        self.public_flags = kwargs.get('public_flags')
 
     def __str__(self):
         return f'<{type(self).__name__} id={self.id}, name={self.name}, discriminator={self.discriminator}>'
 
+    @property
+    def mention(self) -> str:
+        """:class:`str`: The role's mentionable string."""
+        return f'<@{self.id}>'
+
 class Member(User):
 
+    __slots__ = ('nick', 'premium_since', 'mute', 'deaf', 'joined_at')
+
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        user = kwargs.get('user')
+
+        self.id = user.get('id')
+        self.name = user.get('username')
+        self.discriminator = user.get('discriminator')
+        self.avatar = user.get('avatar')
+        self.nick = kwargs.get('nick')
+        self.premium_since = utils.parse_time(kwargs.get('premium_since'))
+        self.mute = kwargs.get('mute')
+        self.deaf = kwargs.get('deaf')
+        self.joined_at = utils.parse_time(kwargs.get('joined_at'))
+
+    def __str__(self):
+        return f'<{type(self).__name__} id={self.id}, name={self.name}, discriminator={self.discriminator}, nick={self.nick}, joined_at={self.joined_at}>'
