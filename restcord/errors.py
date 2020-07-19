@@ -25,6 +25,7 @@ DEALINGS IN THE SOFTWARE.
 """
 
 class HTTPException(Exception):
+
     """Exception that's thrown when an HTTP request operation fails.
     Attributes
     ------------
@@ -80,12 +81,14 @@ class HTTPException(Exception):
 
 
 class Forbidden(HTTPException):
+
     """Exception that's thrown for when status code 403 occurs.
     Subclass of :exc:`HTTPException`
     """
     pass
 
 class NotFound(HTTPException):
+
     """Exception that's thrown for when status code 404 occurs.
     Subclass of :exc:`HTTPException`
     """
