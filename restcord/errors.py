@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """
 The MIT License (MIT)
 
@@ -63,7 +62,7 @@ class HTTPException(Exception):
             fmt = fmt + ': {2}'
 
         super().__init__(fmt.format(self.response, self.code, self.text))
-    
+
     def flatten_dict(self, d, key=''):
         items = []
         for k, v in d.items():

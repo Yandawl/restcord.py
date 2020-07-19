@@ -5,7 +5,6 @@ An asynchronous Python client for Discord's API
 [![PyPI version](https://badge.fury.io/py/restcord.py.svg)](https://badge.fury.io/py/restcord.py.svg)
 [![Python 3.6](https://img.shields.io/badge/python-3.6-green.svg)](https://www.python.org/downloads/release/python-360/)
 
-
 ## Requirements
 ```python
 python>=3.6.0

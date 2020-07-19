@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """
 The MIT License (MIT)
 
@@ -49,7 +48,7 @@ class Designation(ABC):
 
     def __repr__(self) -> str:
         return self.__str__()
-    
+
     def __eq__(self, other) -> bool:
         return self.id == other.id
 
@@ -72,7 +71,7 @@ class Emoji(Designation):
 class Guild(Designation):
 
     __slots__ = (
-        'owner_id', 'application_id', 'region', 'description', 'splash', 'discovery_splash', 'banner', 'afk_channel_id', 'afk_timeout', 
+        'owner_id', 'application_id', 'region', 'description', 'splash', 'discovery_splash', 'banner', 'afk_channel_id', 'afk_timeout',
         'system_channel_id', 'widget_enabled', 'widget_channel_id', 'verification_level', 'features', 'emojis', 'roles', 'default_message_notifications',
         'mfa_level', 'explicit_content_filter', 'max_presences', 'max_members', 'max_video_channel_users', 'vanity_url_code', 'premium_tier', 'premium_subscription_count',
         'system_channel_flags', 'preferred_locale', 'rules_channel_id', 'public_updates_channel_id', 'embed_enabled', 'embed_channel_id'

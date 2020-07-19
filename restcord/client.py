@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """
 The MIT License (MIT)
 
@@ -27,8 +26,7 @@ DEALINGS IN THE SOFTWARE.
 import logging
 from typing import List, Optional
 
-import aiohttp
-from aiohttp import ClientResponse, ClientSession
+from aiohttp import ClientSession
 
 from .http import HTTPClient, Route
 from .models import Channel, Guild, Member, Role
@@ -57,7 +55,6 @@ class RestCord(HTTPClient):
 
     async def get_guild(self, guild_id: int, with_counts=False) -> Guild:
         """|coro|
-
         Get a guild.
 
         Returns
@@ -88,7 +85,6 @@ class RestCord(HTTPClient):
 
     async def get_members(self, guild_id: int, limit: int=1, after_id: int=0) -> List[Member]:
         """|coro|
-
         Get a list of a guild's members.
 
         Returns
@@ -127,7 +123,6 @@ class RestCord(HTTPClient):
 
     async def get_member(self, guild_id: int, member_id: int) -> Member:
         """|coro|
-
         Get a guild's member.
 
         Returns
@@ -160,7 +155,6 @@ class RestCord(HTTPClient):
 
     async def get_channels(self, guild_id: int) -> List[Channel]:
         """|coro|
-
         Get a list of a guild's channels.
 
         Returns
@@ -188,7 +182,6 @@ class RestCord(HTTPClient):
 
     async def get_channel(self, channel_id: int) -> Channel:
         """|coro|
-
         Get a guild's channels.
 
         Returns
@@ -216,7 +209,6 @@ class RestCord(HTTPClient):
 
     async def get_roles(self, guild_id: int) -> List[Role]:
         """|coro|
-
         Get a list of a guild's roles.
 
         Returns

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 """
 The MIT License (MIT)
 
@@ -56,12 +55,12 @@ class Unlockable:
     def __enter__(self):
         return self
 
-    def defer(self):
-        self._unlock = False
-
     def __exit__(self, type, value, traceback):
         if self._unlock:
             self.lock.release()
+
+    def defer(self):
+        self._unlock = False
 
 class Route:
 
@@ -156,7 +155,7 @@ class HTTPClient:
                         __log__.debug('A rate limit bucket has been exhausted (bucket: %s, retry: %s).', bucket, delta)
                         unlockable.defer()
                         self.loop.call_later(delta, lock.release)
-                    
+
                     if 300 > r.status >= 200:
                         __log__.debug('%s %s has received %s', method, url, data)
                         return data
