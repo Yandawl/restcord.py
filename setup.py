@@ -25,6 +25,7 @@ setuptools.setup(
     include_package_data=True,
     install_requires=REQUIREMENTS,
     classifiers=[
+        'Development Status :: 2 - Pre-Alpha',
         'License :: OSI Approved :: MIT License',
         'Intended Audience :: Developers',
         'Natural Language :: English',

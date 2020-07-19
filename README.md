@@ -13,9 +13,9 @@ aiohttp
 json
 ```
 
-## Installation
+## Install
 ```python
-pip install restcord.py
+pip3 install restcord.py
 ```
 
 ## Import
