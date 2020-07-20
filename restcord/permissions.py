@@ -23,15 +23,21 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 
-import re
-from datetime import datetime
+from .snowflake import Snowflake
 
-def parse_time(timestamp):
-    if timestamp:
-        return datetime(*map(int, re.split(r'[^\d]', timestamp.replace('+00:00', ''))))
-    return None
+__all__ = (
+    'PermissionOverwrite'
+)
 
-def try_cast(value, cast_to: type):
-    if not value:
-        return None
-    return cast_to(value)
+class PermissionOverwrite(Snowflake):
+
+    __slots__ = ('type', 'allow', 'deny', 'allow_new', 'deny_new')
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        self.type = kwargs.get('type')
+        self.allow = kwargs.get('allow')
+        self.deny = kwargs.get('deny')
+        self.allow_new = kwargs.get('allow_new')
+        self.deny_new = kwargs.get('deny_new')

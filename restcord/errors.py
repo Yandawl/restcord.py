@@ -79,6 +79,11 @@ class HTTPException(Exception):
         return dict(items)
 
 
+class BadRequest(HTTPException):
+
+    """Exception that's thrown for when status code 400 occurs."""
+    pass
+
 class Forbidden(HTTPException):
 
     """Exception that's thrown for when status code 403 occurs."""

@@ -23,15 +23,24 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 
-import re
-from datetime import datetime
+from .user import User
 
-def parse_time(timestamp):
-    if timestamp:
-        return datetime(*map(int, re.split(r'[^\d]', timestamp.replace('+00:00', ''))))
-    return None
+__all__ = (
+    'Ban'
+)
 
-def try_cast(value, cast_to: type):
-    if not value:
-        return None
-    return cast_to(value)
+class Ban:
+
+    """
+    Model depicting a Discord ban object.
+    """
+
+    __slots__ = ('reason', 'user')
+
+    def __init__(self, **kwargs):
+
+        self.reason = kwargs.get('reason')
+        self.user = User(**kwargs.get('user'))
+
+    def __str__(self):
+        return f'<{type(self).__name__} user_id={self.user.id}, reason={self.reason}>'

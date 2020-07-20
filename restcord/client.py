@@ -28,8 +28,15 @@ from typing import List, Optional
 
 from aiohttp import ClientSession
 
+from .ban import Ban
+from .channel import Channel
+from .emoji import Emoji
+from .guild import Guild
 from .http import HTTPClient, Route
-from .models import Channel, Guild, Member, Role, User
+from .member import Member
+from .message import Message
+from .role import Role
+from .user import User
 
 __log__ = logging.getLogger(__name__)
 
@@ -71,8 +78,11 @@ class RestCord(HTTPClient):
         user_id: :class:`int`
             Discord's identifier for the user.
         """
-        r = Route('GET', '/users/{user_id}', user_id=user_id)
-        user = await self._request(r)
+
+        if not user_id:
+            raise ValueError("Argument cannot be None: user_id")
+
+        user = await self._request(Route('GET', f'/users/{user_id}'))
 
         return User(**user)
 
@@ -101,8 +111,11 @@ class RestCord(HTTPClient):
         if not guild_id:
             raise ValueError("Argument cannot be None: guild_id")
 
-        r = Route("GET", '/guilds/{guild_id}?with_counts={with_counts}', guild_id=guild_id, with_counts=with_counts)
-        guild = await self._request(r)
+        params = {
+            'with_counts': int(with_counts)
+        }
+
+        guild = await self._request(Route("GET", f'/guilds/{guild_id}'), params=params)
 
         return Guild(**guild)
 
@@ -133,8 +146,7 @@ class RestCord(HTTPClient):
         if not member_id:
             raise ValueError("Argument cannot be None: member_id")
 
-        r = Route('GET', '/guilds/{guild_id}/members/{member_id}', guild_id=guild_id, member_id=member_id)
-        member = await self._request(r)
+        member = await self._request(Route('GET', f'/guilds/{guild_id}/members/{member_id}'))
 
         return Member(**member)
 
@@ -171,8 +183,7 @@ class RestCord(HTTPClient):
             'after': after_id
         }
 
-        r = Route('GET', '/guilds/{guild_id}/members', guild_id=guild_id)
-        members = await self._request(r, params=params)
+        members = await self._request(Route('GET', f'/guilds/{guild_id}/members'), params=params)
 
         return [Member(**member) for member in members]
 
@@ -198,8 +209,7 @@ class RestCord(HTTPClient):
         if not channel_id:
             raise ValueError("Argument cannot be None: channel_id")
 
-        r = Route('GET', '/channels/{channel_id}', channel_id=channel_id)
-        channel = await self._request(r)
+        channel = await self._request(Route('GET', f'/channels/{channel_id}'))
 
         return Channel(**channel)
 
@@ -224,11 +234,142 @@ class RestCord(HTTPClient):
 
         if not guild_id:
             raise ValueError("Argument cannot be None: guild_id")
-        
-        r = Route('GET', '/guilds/{guild_id}/channels', guild_id=guild_id)
-        channels = await self._request(r)
+
+        channels = await self._request(Route('GET', f'/guilds/{guild_id}/channels'))
 
         return [Channel(**channel) for channel in channels]
+
+    async def get_message(self, channel_id: int, message_id: int, ) -> Message:
+        """|coro|
+        Get a channel's message.
+
+        Returns
+        ---------
+        Optional[:class:`Message`]
+            The Message or ``None`` if not found.
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/channel#get-channel-message
+
+        Parameters
+        ----------
+        channel_id: :class:`int`
+            Discord's identifier for the channel.
+        message_id: :class:`int`
+            Discord's identifier for the message.
+        """
+
+        if not channel_id:
+            raise ValueError("Argument cannot be None: channel_id")
+
+        if not message_id:
+            raise ValueError("Argument cannot be None: message_id")
+
+        message = await self._request(Route('GET', f'/channels/{channel_id}/messages/{message_id}'))
+
+        return Message(**message)
+
+    async def get_messages(self, channel_id: int, around=None, before=None, after=None, limit=50) -> List[Message]:
+        """|coro|
+        Get a list of a channel's messages.
+
+        Returns
+        ---------
+        List[:class:`Message`]:
+            The list of Channels.
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/channel#get-channel-messages
+
+        Parameters
+        ----------
+        channel_id: :class:`int`
+            Discord's identifier for the channel.
+        around: Optional[:class:`int`]
+	        Get messages around this message ID
+        before: Optional[:class:`int`]
+	        Get messages before this message ID
+        after: Optional[:class:`int`]
+	        Get messages after this message ID
+        limit: Optional[:class:`int`]
+	        Max number of messages to return (1-100).
+            Defaults to 50.
+        """
+
+        if not channel_id:
+            raise ValueError("Argument cannot be None: channel_id")
+
+        params = {
+            'limit': limit
+        }
+
+        if before is not None:
+            params['before'] = before
+
+        if after is not None:
+            params['after'] = after
+
+        if around is not None:
+            params['around'] = around
+
+        messages = await self._request(Route('GET', f'/channels/{channel_id}/messages'), params=params)
+
+        return [Message(**message) for message in messages]
+
+    async def get_reactions(self, channel_id: int, message_id: int, emoji: str, before=None, after=None, limit=25) -> List[User]:
+        """|coro|
+        Get a list of users who have reacted to this message with the emoji.
+
+        Returns
+        ---------
+        List[:class:`User`]:
+            The list of Users who have added this reaction.
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/channel#get-reactions
+
+        Parameters
+        ----------
+        channel_id: :class:`int`
+            Discord's identifier for the channel.
+        message_id: :class:`int`
+            Discord's identifier for the message_id.
+        emoji: :class:`str`
+            Discord's identifier for the channel.
+        before: Optional[:class:`int`]
+	        Get reactions before this user ID
+        after: Optional[:class:`int`]
+	        Get reactions after this user ID
+        limit: Optional[:class:`int`]
+	        Max number of users to return.
+            Defaults to 25.
+        """
+
+        if not channel_id:
+            raise ValueError("Argument cannot be None: channel_id")
+
+        if not message_id:
+            raise ValueError("Argument cannot be None: message_id")
+
+        if not emoji:
+            raise ValueError("Argument cannot be None: emoji")
+
+        params = {
+            'limit': limit
+        }
+
+        if before is not None:
+            params['before'] = before
+
+        if after is not None:
+            params['after'] = after
+
+        users = await self._request(Route('GET', f'/channels/{channel_id}/messages/{message_id}/reactions/{emoji}'), params=params)
+
+        return [User(**user) for user in users]
 
     async def get_roles(self, guild_id: int) -> List[Role]:
         """|coro|
@@ -252,7 +393,135 @@ class RestCord(HTTPClient):
         if not guild_id:
             raise ValueError("Argument cannot be None: guild_id")
 
-        r = Route('GET', '/guilds/{guild_id}/roles', guild_id=guild_id)
-        roles = await self._request(r)
+        roles = await self._request(Route('GET', f'/guilds/{guild_id}/roles'))
 
         return [Role(**role) for role in roles]
+
+    async def get_emoji(self, guild_id: int, emoji_id: int) -> Emoji:
+        """|coro|
+        Get a guild emoji.
+
+        Returns
+        ---------
+        Optional[:class:`Emoji`]
+            The Emoji or ``None`` if not found.
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/emoji#get-guild-emoji
+
+        Parameters
+        ----------
+        guild_id: :class:`int`
+            Discord's identifier for the guild.
+        emoji_id: :class:`int`
+            Discord's identifier for the emoji.
+        """
+
+        if not guild_id:
+            raise ValueError("Argument cannot be None: guild_id")
+
+        if not emoji_id:
+            raise ValueError("Argument cannot be None: emoji_id")
+
+        emoji = await self._request(Route("GET", f'/guilds/{guild_id}/emojis/{emoji_id}'))
+
+        return Emoji(**emoji)
+
+    async def get_emojis(self, guild_id: int) -> List[Emoji]:
+        """|coro|
+        Get a guild's emojis.
+
+        Returns
+        ---------
+        List[:class:`Emoji`]:
+            The list of Emoji.
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/emoji#list-guild-emojis
+
+        Parameters
+        ----------
+        guild_id: :class:`int`
+            Discord's identifier for the guild.
+        """
+
+        if not guild_id:
+            raise ValueError("Argument cannot be None: guild_id")
+
+        emojis = await self._request(Route("GET", f'/guilds/{guild_id}/emojis'))
+
+        return [Emoji(**emojis) for emoji in emojis]
+
+    async def get_ban(self, guild_id: int, user_id: int) -> Ban:
+        """|coro|
+        Get a guild ban.
+
+        Returns
+        ---------
+        Optional[:class:`Ban`]
+            The Ban or ``None`` if not found.
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/guild#get-guild-ban
+
+        Parameters
+        ----------
+        guild_id: :class:`int`
+            Discord's identifier for the guild.
+        user_id: :class:`int`
+            Discord's identifier for the user.
+
+        Raises
+        -------
+        Forbidden
+            You do not have proper permissions to get the information.
+        HTTPException
+            An error occurred while fetching the information.
+        """
+
+        if not guild_id:
+            raise ValueError("Argument cannot be None: guild_id")
+
+        if not user_id:
+            raise ValueError("Argument cannot be None: user_id")
+
+        ban = await self._request(Route("GET", f'/guilds/{guild_id}/bans/{user_id}'))
+
+        return Ban(**ban)
+
+    async def get_bans(self, guild_id: int) -> List[Ban]:
+        """|coro|
+        Get a guild's bans.
+
+        Returns
+        ---------
+        List[:class:`Role`]:
+            The list of Roles.
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/guild#get-guild-bans
+
+        Parameters
+        ----------
+        guild_id: :class:`int`
+            Discord's identifier for the guild.
+        with_counts: :class:`bool`
+
+        Raises
+        -------
+        Forbidden
+            You do not have proper permissions to get the information.
+        HTTPException
+            An error occurred while fetching the information.
+        """
+
+        if not guild_id:
+            raise ValueError("Argument cannot be None: guild_id")
+
+        bans = await self._request(Route("GET", f'/guilds/{guild_id}/bans'))
+
+        return [Ban(**bans) for ban in bans]

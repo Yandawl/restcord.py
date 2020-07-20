@@ -35,7 +35,15 @@ import aiohttp
 from aiohttp import ClientSession
 
 from . import __version__
-from .errors import BadGateway, Forbidden, HTTPException, InternalServerError, NotFound, RateLimited
+from .errors import (
+    BadGateway,
+    BadRequest,
+    Forbidden,
+    HTTPException,
+    InternalServerError,
+    NotFound,
+    RateLimited
+)
 
 __log__ = logging.getLogger(__name__)
 
@@ -48,21 +56,10 @@ class Route:
 
     BASE = 'https://discord.com/api'
 
-    def __init__(self, method, path, **kwargs):
+    def __init__(self, method, path):
         self.path = path
         self.method = method
-        url = (self.BASE + self.path)
-        if kwargs:
-            self.url = url.format(**{k: _uriquote(v) if isinstance(v, str) else v for k, v in kwargs.items()})
-        else:
-            self.url = url
-
-        self.channel_id = kwargs.get('channel_id')
-        self.guild_id = kwargs.get('guild_id')
-
-    @property
-    def bucket(self):
-        return f'{self.channel_id}:{self.guild_id}:{self.path}'
+        self.url = (self.BASE + self.path)
 
 class HTTPClient:
 
@@ -88,7 +85,6 @@ class HTTPClient:
             await self.__session.close()
 
     async def _request(self, route: Route, **kwargs):
-        bucket = route.bucket
         method = route.method
         url = route.url
 
@@ -115,7 +111,7 @@ class HTTPClient:
 
             remaining = r.headers.get('X-Ratelimit-Remaining')
             if remaining == '0' and r.status != 429:
-                __log__.debug(f'A rate limit bucket has been exhausted (bucket: {bucket}, retry: {self.__parse_ratelimit_header(r)}).')
+                __log__.debug(f'A rate limit bucket has been exhausted (retry: {self.__parse_ratelimit_header(r)}).')
 
             if 300 > r.status >= 200:
                 __log__.debug(f'{method} {url} has received {data}')
@@ -130,9 +126,12 @@ class HTTPClient:
                 if is_global:
                     __log__.warning(f'Global rate limit has been hit. Retry in {retry_after:.2f} seconds.')
                 else:
-                    __log__.warning(f'Rate limit hit. Retry in {retry_after:.2f} seconds. Handled under the bucket {bucket}')
+                    __log__.warning(f'Rate limit hit. Retry in {retry_after:.2f} seconds.')
 
                 raise RateLimited(r, data)
+
+            if r.status == 400:
+                raise BadRequest(r, data)
 
             if r.status == 403:
                 raise Forbidden(r, data)
