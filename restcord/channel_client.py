@@ -14,9 +14,10 @@ __all__ = (
     'ChannelClient'
 )
 
+
 class ChannelClient(HTTPClient):
 
-    def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession]=None) -> None:
+    def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession] = None) -> None:
         super().__init__(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
 
     async def get_message(self, channel_id: int, message_id: int) -> Message:
@@ -68,13 +69,13 @@ class ChannelClient(HTTPClient):
         channel_id: :class:`int`
             Discord's identifier for the channel.
         around: Optional[:class:`int`]
-	        Get messages around this message ID
+            Get messages around this message ID
         before: Optional[:class:`int`]
-	        Get messages before this message ID
+            Get messages before this message ID
         after: Optional[:class:`int`]
-	        Get messages after this message ID
+            Get messages after this message ID
         limit: Optional[:class:`int`]
-	        Max number of messages to return (1-100).
+            Max number of messages to return (1-100).
             Defaults to 50.
         """
 
@@ -149,11 +150,11 @@ class ChannelClient(HTTPClient):
         emoji: :class:`str`
             Discord's identifier for the channel.
         before: Optional[:class:`int`]
-	        Get reactions before this user ID
+            Get reactions before this user ID
         after: Optional[:class:`int`]
-	        Get reactions after this user ID
+            Get reactions after this user ID
         limit: Optional[:class:`int`]
-	        Max number of users to return.
+            Max number of users to return.
             Defaults to 25.
         """
 
