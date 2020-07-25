@@ -17,7 +17,7 @@ from .errors import (
     NotFound,
     RateLimited
 )
-from .guild import Guild
+from .guild import Guild, GuildPreview
 from .member import Member
 from .message import Message
 from .role import Role

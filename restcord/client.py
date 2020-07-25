@@ -7,7 +7,7 @@ from aiohttp import ClientSession
 from .ban import Ban
 from .channel import Channel
 from .emoji import Emoji
-from .guild import Guild
+from .guild import Guild, GuildPreview
 from .http import HTTPClient, Route
 from .member import Member
 from .message import Message
@@ -94,6 +94,32 @@ class RestCord(HTTPClient):
         guild = await self._request(Route("GET", f'/guilds/{guild_id}'), params=params)
 
         return Guild(**guild)
+
+    async def get_guild_preview(self, guild_id: int) -> GuildPreview:
+        """|coro|
+        Get a guild preview.
+
+        Returns
+        ---------
+        Optional[:class:`GuildPreview`]
+            The GuildPreview or ``None`` if not found.
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/guild#guild-preview-object
+
+        Parameters
+        ----------
+        guild_id: :class:`int`
+            Discord's identifier for the guild.
+        """
+
+        if not guild_id:
+            raise ValueError("Argument cannot be None: guild_id")
+
+        guild = await self._request(Route("GET", f'/guilds/{guild_id}/preview'))
+
+        return GuildPreview(**guild)
 
     async def get_member(self, guild_id: int, member_id: int) -> Member:
         """|coro|

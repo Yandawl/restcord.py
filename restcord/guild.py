@@ -4,21 +4,43 @@ from .role import Role
 from .snowflake import Designation
 
 __all__ = (
-    'Guild'
+    'Guild',
+    'GuildPreview'
 )
 
-class Guild(Designation):
+class GuildPreview(Designation):
 
     """
     Model depicting a Discord guild object.
     """
 
     __slots__ = (
-        'owner_id', 'application_id', 'region', 'description', 'splash', 'discovery_splash', 'banner', 'afk_channel_id', 'afk_timeout',
-        'system_channel_id', 'widget_enabled', 'widget_channel_id', 'verification_level', 'features', 'emojis', 'roles', 'default_message_notifications',
+        'icon', 'splash', 'discovery_splash', 'features', 'emojis', 'approximate_member_count', 'approximate_presence_count', 'description'
+    )
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        self.icon = kwargs.get('icon')
+        self.splash = kwargs.get('splash')
+        self.discovery_splash = kwargs.get('discovery_splash')
+        self.features = kwargs.get('features')
+        self.emojis = [Emoji(**e) for e in kwargs.get('emojis', [])]
+        self.approximate_member_count = kwargs.get('approximate_member_count')
+        self.approximate_presence_count = kwargs.get('approximate_presence_count')
+        self.description = kwargs.get('description')
+
+class Guild(GuildPreview):
+
+    """
+    Model depicting a Discord guild object.
+    """
+
+    __slots__ = (
+        'owner_id', 'application_id', 'region', 'banner', 'afk_channel_id', 'afk_timeout',
+        'system_channel_id', 'widget_enabled', 'widget_channel_id', 'verification_level', 'roles', 'default_message_notifications',
         'mfa_level', 'explicit_content_filter', 'max_presences', 'max_members', 'max_video_channel_users', 'vanity_url_code', 'premium_tier', 'premium_subscription_count',
-        'system_channel_flags', 'preferred_locale', 'rules_channel_id', 'public_updates_channel_id', 'embed_enabled', 'embed_channel_id', 'approximate_member_count',
-        'approximate_presence_count'
+        'system_channel_flags', 'preferred_locale', 'rules_channel_id', 'public_updates_channel_id', 'embed_enabled', 'embed_channel_id'
     )
 
     def __init__(self, **kwargs):
@@ -27,9 +49,6 @@ class Guild(Designation):
         self.owner_id = kwargs.get('owner_id')
         self.application_id = kwargs.get('application_id')
         self.region = kwargs.get('region')
-        self.description = kwargs.get('description')
-        self.splash = kwargs.get('splash')
-        self.discovery_splash = kwargs.get('discovery_splash')
         self.banner = kwargs.get('banner')
         self.afk_channel_id = kwargs.get('afk_channel_id')
         self.afk_timeout = kwargs.get('afk_timeout')
@@ -37,8 +56,6 @@ class Guild(Designation):
         self.widget_enabled = kwargs.get('widget_enabled')
         self.widget_channel_id = kwargs.get('widget_channel_id')
         self.verification_level = kwargs.get('verification_level')
-        self.features = kwargs.get('features')
-        self.emojis = [Emoji(**e) for e in kwargs.get('emojis', [])]
         self.roles = [Role(**r) for r in kwargs.get('roles', [])]
         self.default_message_notifications = kwargs.get('default_message_notifications')
         self.mfa_level = kwargs.get('mfa_level')
@@ -55,5 +72,3 @@ class Guild(Designation):
         self.public_updates_channel_id = kwargs.get('public_updates_channel_id')
         self.embed_enabled = kwargs.get('embed_enabled')
         self.embed_channel_id = kwargs.get('embed_channel_id')
-        self.approximate_member_count = kwargs.get('approximate_member_count')
-        self.approximate_presence_count = kwargs.get('approximate_presence_count')
