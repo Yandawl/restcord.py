@@ -137,6 +137,6 @@ class HTTPClient:
             return (reset - now).total_seconds()
         else:
             return float(reset_after)
-    
+
     def __to_json(self, obj):
         return json.dumps(obj, separators=(',', ':'), ensure_ascii=True)

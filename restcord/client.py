@@ -31,11 +31,11 @@ class RestCord:
     __slots__ = ('channel_client', 'emoji_client', 'guild_client', 'user_client', 'voice_client')
 
     def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession]=None) -> None:
-        self.channel_client = ChannelClient(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
-        self.emoji_client = EmojiClient(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
-        self.guild_client = GuildClient(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
-        self.user_client = UserClient(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
-        self.voice_client = VoiceClient(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
+        self.channel_client = ChannelClient(token, loop, proxy, proxy_auth, session)
+        self.emoji_client = EmojiClient(token, loop, proxy, proxy_auth, session)
+        self.guild_client = GuildClient(token, loop, proxy, proxy_auth, session)
+        self.user_client = UserClient(token, loop, proxy, proxy_auth, session)
+        self.voice_client = VoiceClient(token, loop, proxy, proxy_auth, session)
 
     async def __aenter__(self):
         return self

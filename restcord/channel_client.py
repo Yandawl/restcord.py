@@ -4,6 +4,7 @@ from typing import List, Optional
 
 from aiohttp import ClientSession
 
+from .channel import Channel
 from .http import HTTPClient, Route
 from .message import Message
 from .user import User
@@ -19,6 +20,49 @@ class ChannelClient(HTTPClient):
 
     def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession] = None) -> None:
         super().__init__(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
+
+    async def get_channel(self, channel_id: int) -> Channel:
+        """|coro|
+        Get a guild's channels.
+
+        Returns
+        ---------
+        Optional[:class:`Channel`]
+            The Channel or ``None`` if not found.
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/channel#get-channel
+
+        Parameters
+        ----------
+        channel_id: :class:`int`
+            Discord's identifier for the channel.
+        """
+        if not channel_id:
+            raise ValueError("Argument cannot be None: channel_id")
+
+        channel = await self._request(Route('GET', f'/channels/{channel_id}'))
+
+        return Channel(**channel)
+
+    async def delete_channel(self, channel_id: int) -> None:
+        """|coro|
+        Deletes a guild channel or closes a private message.
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/channel#deleteclose-channel
+
+        Parameters
+        ----------
+        channel_id: :class:`int`
+            Discord's identifier for the channel.
+        """
+        if not channel_id:
+            raise ValueError("Argument cannot be None: channel_id")
+
+        await self._request(Route('DELETE', f'/channels/{channel_id}'))
 
     async def get_message(self, channel_id: int, message_id: int) -> Message:
         """|coro|
