@@ -41,11 +41,12 @@ from restcord.errors import (
 client = RestCord("Your Discord application token here")
 ```
 
-## Get a [Guild](https://github.com/Yandawl/restcord.py/blob/4210d00d27e0cae7ff1c40db5d5c90e10b3f7252/restcord/guild.py#L33)
+## Get a Guild
 ```python
 try:
-    guild = await client.get_guild(guild_id=265561352683126786)
-    print(guild)
+    async with client as rc:
+        guild = await rc.guildget_guild(guild_id=265561352683126786)
+        print(guild)
 except Forbidden as ex:
     print(ex)
 ```
@@ -53,11 +54,12 @@ except Forbidden as ex:
 ## Add a reaction to a message
 ```python
 try:
-    await client.add_reaction(
-        channel_id=331893934454472707, 
-        message_id=736436235140333599, 
-        emoji="msq:285508293596807168"
-    )
+    async with client as rc:
+        await rc.channel.add_reaction(
+            channel_id=331893934454472707, 
+            message_id=736436235140333599, 
+            emoji="msq:285508293596807168"
+        )
 except BadRequest as ex:
     print(ex)
 except RateLimited as ex:
