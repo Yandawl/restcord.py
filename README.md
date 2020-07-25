@@ -44,7 +44,7 @@ client = RestCord("Your Discord application token here")
 ```
 
 ## Structure
-RestCord is structured in the same way as Discord's REST API [documentation](https://discord.com/developers/docs/intro). Once you have initialised RestCord you will have access to Channel, Emoji, Guild, User and Voice objects, which contain asynchronous methods to communicate with API end points.
+RestCord is structured in the same way as Discord's REST API [documentation](https://discord.com/developers/docs/intro). Once you have initialised RestCord you will have access to channel_client, emoji_client, guild_client, user_client and voice_client objects, which contain asynchronous methods to communicate with API end points.
 
 #### Example: get a guild object
 In this example, we use RestCord to perform a GET request to Discord's [guild](https://discord.com/developers/docs/resources/guild#get-guild) API end point, which will return a guild object. Printing this object will output some basic details about the guild such as id and name but the object contains fields as per the documentation.
@@ -52,7 +52,7 @@ In this example, we use RestCord to perform a GET request to Discord's [guild](h
 ```python
 try:
     async with client as rc:
-        guild = await rc.guild.get_guild(guild_id=265561352683126786)
+        guild = await rc.guild_client.get_guild(guild_id=265561352683126786)
         print(guild)
 except Forbidden as ex:
     print(ex)
