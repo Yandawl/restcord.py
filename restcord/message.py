@@ -28,7 +28,7 @@ class Message(Snowflake):
         self.pinned = kwargs.get('pinned')
         self.tts = kwargs.get('tts')
         self.mention_everyone = kwargs.get('mention_everyone')
-        
+
         self.timestamp = utils.parse_time(kwargs.get('timestamp'))
 
         edited_timestamp = kwargs.get('edited_timestamp')

@@ -17,9 +17,8 @@ __all__ = (
 )
 
 class RestCord:
-
     """
-    Asynchronous Python clinet for communicating with Discord's API.
+    Asynchronous Python client for communicating with Discord's API.
 
     Parameters
     ------------

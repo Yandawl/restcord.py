@@ -5,7 +5,6 @@ import json
 import logging
 import sys
 from typing import Optional
-from urllib.parse import quote as _uriquote
 
 import aiohttp
 from aiohttp import ClientSession

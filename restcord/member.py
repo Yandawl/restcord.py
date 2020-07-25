@@ -8,7 +8,6 @@ __all__ = (
 )
 
 class Member(User):
-
     """
     Model depicting a Discord member object.
     A member is an extention of :class:`User` where user is a member of a guild.

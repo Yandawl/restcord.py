@@ -85,10 +85,12 @@ If Discord return error HTTP status codes, RestCord will throw a relevent except
 #### Example: add a reaction to a message
 In this example we try to add a reaction to a message. There are several things to be aware of here:
 
-* Does our application have permission to add reactions to messages? If not, a Forbidden exception will be thrown.
-* Have we URL encoded the emoji as per specified by the [documentation](https://discord.com/developers/docs/resources/channel#create-reaction
+*   Does our application have permission to add reactions to messages? If not, a Forbidden exception will be thrown.
+
+*   Have we URL encoded the emoji as per specified by the [documentation](https://discord.com/developers/docs/resources/channel#create-reaction
 ). If not, a BadRequest exception will be thrown.
-* This particular end point has strict rate limits. If we have already added a reaction to the message we may be rate limited. In this case a RateLimited exception will be thrown and you can get more information about that limit from the exception object.
+
+*   This particular end point has strict rate limits. If we have already added a reaction to the message we may be rate limited. In this case a RateLimited exception will be thrown and you can get more information about that limit from the exception object.
 
 ```python
 try:

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import json
 from abc import ABC
 
 __all__ = (
