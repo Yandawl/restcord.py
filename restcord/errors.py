@@ -97,7 +97,14 @@ class NotFound(HTTPException):
 class RateLimited(HTTPException):
 
     """Exception that's thrown for when status code 429 occurs."""
-    pass
+
+    __slots__ = ('retry_after', 'is_global')
+
+    def __init__(self, response, message):
+        super().__init__(response, message)
+
+        self.retry_after = message['retry_after'] / 1000.0
+        self.is_global = message.get('global', False)
 
 class InternalServerError(HTTPException):
 

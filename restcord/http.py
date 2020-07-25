@@ -94,16 +94,6 @@ class HTTPClient:
                 return data
 
             if r.status == 429:
-                if not r.headers.get('Via'):
-                    raise Exception()
-
-                retry_after = data['retry_after'] / 1000.0
-                is_global = data.get('global', False)
-                if is_global:
-                    __log__.warning(f'Global rate limit has been hit. Retry in {retry_after:.2f} seconds.')
-                else:
-                    __log__.warning(f'Rate limit hit. Retry in {retry_after:.2f} seconds.')
-
                 raise RateLimited(r, data)
 
             if r.status == 400:
