@@ -260,7 +260,7 @@ class RestCord(HTTPClient):
 
         return [Channel(**channel) for channel in channels]
 
-    async def get_message(self, channel_id: int, message_id: int, ) -> Message:
+    async def get_message(self, channel_id: int, message_id: int) -> Message:
         """|coro|
         Get a channel's message.
 
