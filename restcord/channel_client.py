@@ -40,7 +40,6 @@ class ChannelClient(HTTPClient):
         message_id: :class:`int`
             Discord's identifier for the message.
         """
-
         if not channel_id:
             raise ValueError("Argument cannot be None: channel_id")
 
@@ -78,7 +77,6 @@ class ChannelClient(HTTPClient):
             Max number of messages to return (1-100).
             Defaults to 50.
         """
-
         if not channel_id:
             raise ValueError("Argument cannot be None: channel_id")
 
@@ -116,7 +114,6 @@ class ChannelClient(HTTPClient):
         emoji: :class:`str`
             The URL encoded emoji
         """
-
         if not channel_id:
             raise ValueError("Argument cannot be None: channel_id")
 
@@ -157,7 +154,6 @@ class ChannelClient(HTTPClient):
             Max number of users to return.
             Defaults to 25.
         """
-
         if not channel_id:
             raise ValueError("Argument cannot be None: channel_id")
 

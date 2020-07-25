@@ -43,7 +43,6 @@ class GuildClient(HTTPClient):
             Whether to include approximate member counts.
             Defaults to ``False``.
         """
-
         if not guild_id:
             raise ValueError("Argument cannot be None: guild_id")
 
@@ -73,7 +72,6 @@ class GuildClient(HTTPClient):
         guild_id: :class:`int`
             Discord's identifier for the guild.
         """
-
         if not guild_id:
             raise ValueError("Argument cannot be None: guild_id")
 
@@ -101,7 +99,6 @@ class GuildClient(HTTPClient):
         member_id: :class:`int`
             Discord's identifier for the member.
         """
-
         if not guild_id:
             raise ValueError("Argument cannot be None: guild_id")
 
@@ -136,7 +133,6 @@ class GuildClient(HTTPClient):
             Only get members with an id greater than after_id.
             Defaults to ``0``.
         """
-
         if not guild_id:
             raise ValueError("Argument cannot be None: guild_id")
 
@@ -167,7 +163,6 @@ class GuildClient(HTTPClient):
         channel_id: :class:`int`
             Discord's identifier for the channel.
         """
-
         if not channel_id:
             raise ValueError("Argument cannot be None: channel_id")
 
@@ -193,7 +188,6 @@ class GuildClient(HTTPClient):
         guild_id: :class:`int`
             Discord's identifier for the guild.
         """
-
         if not guild_id:
             raise ValueError("Argument cannot be None: guild_id")
 
@@ -219,7 +213,6 @@ class GuildClient(HTTPClient):
         channel_id: :class:`int`
             Discord's identifier for the channel.
         """
-
         if not guild_id:
             raise ValueError("Argument cannot be None: guild_id")
 
@@ -254,7 +247,6 @@ class GuildClient(HTTPClient):
         HTTPException
             An error occurred while fetching the information.
         """
-
         if not guild_id:
             raise ValueError("Argument cannot be None: guild_id")
 
@@ -291,7 +283,6 @@ class GuildClient(HTTPClient):
         HTTPException
             An error occurred while fetching the information.
         """
-
         if not guild_id:
             raise ValueError("Argument cannot be None: guild_id")
 

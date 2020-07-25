@@ -38,7 +38,6 @@ class EmojiClient(HTTPClient):
         emoji_id: :class:`int`
             Discord's identifier for the emoji.
         """
-
         if not guild_id:
             raise ValueError("Argument cannot be None: guild_id")
 
@@ -67,7 +66,6 @@ class EmojiClient(HTTPClient):
         guild_id: :class:`int`
             Discord's identifier for the guild.
         """
-
         if not guild_id:
             raise ValueError("Argument cannot be None: guild_id")
 

@@ -36,7 +36,6 @@ class UserClient(HTTPClient):
         user_id: :class:`int`
             Discord's identifier for the user.
         """
-
         if not user_id:
             raise ValueError("Argument cannot be None: user_id")
 

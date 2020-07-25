@@ -7,7 +7,6 @@ __all__ = (
 )
 
 class Snowflake(ABC):
-
     """
     Abstract base class depicting a Discord object that has an ID.
     """
@@ -27,7 +26,6 @@ class Snowflake(ABC):
         return self.id == other.id
 
 class Designation(Snowflake):
-
     """
     An extention to the Snowflake abstract base class depicting a Discord object that has a name.
     """
