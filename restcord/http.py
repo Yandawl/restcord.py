@@ -49,6 +49,12 @@ class HTTPClient:
         self.__session = session
         self.__agent = f'RestCord.py (https://github.com/Yandawl/restcord.py {__version__}) Python/{sys.version_info[0]}.{sys.version_info[1]} aiohttp/{aiohttp.__version__}'
 
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, exc_type, exc, tb):
+        await self.close()
+
     @property
     def session(self) -> ClientSession:
         """:class:`ClientSession`: The aiohttp ClientSession."""

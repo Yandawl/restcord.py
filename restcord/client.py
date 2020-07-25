@@ -29,14 +29,14 @@ class RestCord:
         Optionally include your aiohttp session
     """
 
-    __slots__ = ('channel', 'emoji', 'guild', 'user', 'voice')
+    __slots__ = ('channel_client', 'emoji_client', 'guild_client', 'user_client', 'voice_client')
 
     def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession]=None) -> None:
-        self.channel = ChannelClient(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
-        self.emoji = EmojiClient(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
-        self.guild = GuildClient(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
-        self.user = UserClient(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
-        self.voice = VoiceClient(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
+        self.channel_client = ChannelClient(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
+        self.emoji_client = EmojiClient(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
+        self.guild_client = GuildClient(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
+        self.user_client = UserClient(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
+        self.voice_client = VoiceClient(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
 
     async def __aenter__(self):
         return self
@@ -45,8 +45,8 @@ class RestCord:
         await self.close()
 
     async def close(self):
-        await self.channel.close()
-        await self.emoji.close()
-        await self.guild.close()
-        await self.user.close()
-        await self.voice.close()
+        await self.channel_client.close()
+        await self.emoji_client.close()
+        await self.guild_client.close()
+        await self.user_client.close()
+        await self.voice_client.close()

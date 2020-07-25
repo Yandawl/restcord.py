@@ -62,12 +62,20 @@ except Forbidden as ex:
 RestCord can be used with or without the AsyncContextManager. Using it will ensure that any open aiohttp client sessions are closed.
 ```python
 async with client as rc:
-    voice_regions = await rc.voice.get_voice_regions()
+    voice_regions = await rc.voice_client.get_voice_regions()
+```
+
+Or more granularly:
+
+```python
+async with client.guild_client as gc:
+    channel = await gc.get_channel(265586371178135562)
+    print(channel)
 ```
 
 If you do not use the AsyncContextManager, you must call the close() function on RestCord to close any open aiohttp client sessions.
 ```python
-member = await client.guild.get_member(265561352683126786, 50527603626344448)
+member = await client.guild_client.get_member(265561352683126786, 50527603626344448)
 await client.close()
 ```
 
@@ -84,8 +92,8 @@ In this example we try to add a reaction to a message. There are several things 
 
 ```python
 try:
-    async with client as rc:
-        await rc.channel.add_reaction(331893934454472707, 736436235140333599, emoji="msq:285508293596807168")
+    async with client.channel_client as cc:
+        await cc.add_reaction(331893934454472707, 736436235140333599, emoji="msq:285508293596807168")
 except Forbidden as ex:
     print(ex)
 except BadRequest as ex:
