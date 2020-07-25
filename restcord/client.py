@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+from typing import Optional
 
 from aiohttp import ClientSession
 
