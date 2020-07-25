@@ -42,6 +42,9 @@ class RestCord:
         return self
 
     async def __aexit__(self, exc_type, exc, tb):
+        await self.close()
+
+    async def close(self):
         await self.channel.close()
         await self.emoji.close()
         await self.guild.close()
