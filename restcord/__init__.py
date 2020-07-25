@@ -22,3 +22,4 @@ from .member import Member
 from .message import Message
 from .role import Role
 from .user import User
+from .voice import VoiceRegion
