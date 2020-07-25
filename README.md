@@ -1,5 +1,9 @@
 # restcord.py
-An asynchronous Python client for Discord's API
+An asynchronous Python client for Discord's API.
+
+You can aquire an application token from Discord's [developer portal](https://discord.com/developers/applications) but please
+take care to read through Discord's developer [terms of service](https://discord.com/developers/docs/legal) 
+and [policy document](https://discord.com/developers/docs/policy) as you agree to use this library in accordance with these terms.
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/730c9a3ace144475baf0cc626eaf364a)](https://www.codacy.com/manual/Yandawl/restcord.py?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Yandawl/restcord.py&amp;utm_campaign=Badge_Grade)
 [![PyPI version](https://badge.fury.io/py/restcord.py.svg)](https://badge.fury.io/py/restcord.py.svg)
@@ -21,15 +25,27 @@ pip3 install restcord.py
 ## Import
 ```python
 from restcord import RestCord
+from restcord.errors import (
+    BadRequest,
+    Forbidden,
+    NotFound,
+    RateLimited,
+    InternalServerError,
+    BadGateway
+)
 ```
 
 ## Instantiate
+
 ```python
 client = RestCord("Your Discord application token here")
 ```
 
 ## Use
 ```python
-guild = await client.get_guild(265561352683126786)
-print(guild)
+try:
+    guild = await client.get_guild(265561352683126786)
+    print(guild)
+except Forbidden as ex:
+    print(ex)
 ```
