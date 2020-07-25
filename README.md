@@ -41,11 +41,28 @@ from restcord.errors import (
 client = RestCord("Your Discord application token here")
 ```
 
-## Use
+## Get a [Guild](https://github.com/Yandawl/restcord.py/blob/4210d00d27e0cae7ff1c40db5d5c90e10b3f7252/restcord/guild.py#L33)
 ```python
 try:
-    guild = await client.get_guild(265561352683126786)
+    guild = await client.get_guild(guild_id=265561352683126786)
     print(guild)
 except Forbidden as ex:
     print(ex)
+```
+
+## Add a reaction to a message
+```python
+try:
+    await client.add_reaction(
+        channel_id=331893934454472707, 
+        message_id=736436235140333599, 
+        emoji="msq:285508293596807168"
+    )
+except BadRequest as ex:
+    print(ex)
+except RateLimited as ex:
+    if ex.is_global:
+        print(f'Global rate limit has been hit. Retry in {ex.retry_after:.2f} seconds.')
+    else:
+        print(f'Rate limit hit. Retry in {ex.retry_after:.2f} seconds.')
 ```
