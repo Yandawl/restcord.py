@@ -339,6 +339,35 @@ class RestCord(HTTPClient):
 
         return [Message(**message) for message in messages]
 
+    async def add_reaction(self, channel_id: int, message_id: int, emoji: str):
+        """|coro|
+        Add a reaction to a message.
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/channel#create-reaction
+
+        Parameters
+        ----------
+        channel_id: :class:`int`
+            Discord's identifier for the channel.
+        message_id: :class:`int`
+            Discord's identifier for the message.
+        emoji: :class:`str`
+            The URL encoded emoji
+        """
+
+        if not channel_id:
+            raise ValueError("Argument cannot be None: channel_id")
+
+        if not message_id:
+            raise ValueError("Argument cannot be None: message_id")
+
+        if not emoji:
+            raise ValueError("Argument cannot be None: emoji")
+
+        await self._request(Route('PUT', f'/channels/{channel_id}/messages/{message_id}/reactions/{emoji}/@me'))
+
     async def get_reactions(self, channel_id: int, message_id: int, emoji: str, before=None, after=None, limit=25) -> List[User]:
         """|coro|
         Get a list of users who have reacted to this message with the emoji.
