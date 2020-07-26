@@ -18,6 +18,7 @@ from .errors import (
     RateLimited
 )
 from .guild import Guild, GuildPreview
+from .invite import Invite
 from .member import Member
 from .message import Message
 from .role import Role
