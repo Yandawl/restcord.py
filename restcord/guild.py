@@ -31,7 +31,7 @@ class GuildPreview(Designation):
         self.approximate_member_count = kwargs.get('approximate_member_count')
         self.approximate_presence_count = kwargs.get('approximate_presence_count')
         self.description = kwargs.get('description')
-        
+
         welcome_screen = kwargs.get('welcome_screen')
         if welcome_screen:
             self.welcome_screen = WelcomeScreen(**welcome_screen)
