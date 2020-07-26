@@ -7,6 +7,7 @@ from aiohttp import ClientSession
 from .channel_client import ChannelClient
 from .emoji_client import EmojiClient
 from .guild_client import GuildClient
+from .invite_client import InviteClient
 from .user_client import UserClient
 from .voice_client import VoiceClient
 
@@ -28,12 +29,13 @@ class RestCord:
         Optionally include your aiohttp session
     """
 
-    __slots__ = ('channel_client', 'emoji_client', 'guild_client', 'user_client', 'voice_client')
+    __slots__ = ('channel_client', 'emoji_client', 'guild_client', 'invite_client', 'user_client', 'voice_client')
 
     def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession]=None) -> None:
         self.channel_client = ChannelClient(token, loop, proxy, proxy_auth, session)
         self.emoji_client = EmojiClient(token, loop, proxy, proxy_auth, session)
         self.guild_client = GuildClient(token, loop, proxy, proxy_auth, session)
+        self.invite_client = InviteClient(token, loop, proxy, proxy_auth, session)
         self.user_client = UserClient(token, loop, proxy, proxy_auth, session)
         self.voice_client = VoiceClient(token, loop, proxy, proxy_auth, session)
 
@@ -47,5 +49,6 @@ class RestCord:
         await self.channel_client.close()
         await self.emoji_client.close()
         await self.guild_client.close()
+        await self.invite_client.close()
         await self.user_client.close()
         await self.voice_client.close()
