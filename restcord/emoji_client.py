@@ -72,3 +72,26 @@ class EmojiClient(HTTPClient):
         emojis = await self._request(Route("GET", f'/guilds/{guild_id}/emojis'))
 
         return [Emoji(**emojis) for emoji in emojis]
+
+    async def delete_emoji(self, guild_id: int, emoji_id: int):
+        """|coro|
+        Deletes an emoji from a guild.
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/emoji#delete-guild-emoji
+
+        Parameters
+        ----------
+        guild_id: :class:`int`
+            Discord's identifier for the guild.
+        emoji_id: :class:`int`
+            Discord's identifier for the emoji.
+        """
+        if not guild_id:
+            raise ValueError("Argument cannot be None: channel_id")
+
+        if not emoji_id:
+            raise ValueError("Argument cannot be None: emoji_id")
+
+        await self._request(Route('DELETE', f'/guilds/{guild_id}/emojis/{emoji_id}'))
