@@ -5,7 +5,9 @@ from .snowflake import Designation
 
 __all__ = (
     'Guild',
-    'GuildPreview'
+    'GuildPreview',
+    'WelcomeScreen',
+    'WelcomeChannel'
 )
 
 class GuildPreview(Designation):
@@ -15,7 +17,7 @@ class GuildPreview(Designation):
     """
 
     __slots__ = (
-        'icon', 'splash', 'discovery_splash', 'features', 'emojis', 'approximate_member_count', 'approximate_presence_count', 'description'
+        'icon', 'splash', 'discovery_splash', 'features', 'emojis', 'approximate_member_count', 'approximate_presence_count', 'description', 'welcome_screen'
     )
 
     def __init__(self, **kwargs):
@@ -29,6 +31,12 @@ class GuildPreview(Designation):
         self.approximate_member_count = kwargs.get('approximate_member_count')
         self.approximate_presence_count = kwargs.get('approximate_presence_count')
         self.description = kwargs.get('description')
+        
+        welcome_screen = kwargs.get('welcome_screen')
+        if welcome_screen:
+            self.welcome_screen = WelcomeScreen(**welcome_screen)
+        else:
+            self.welcome_screen = None
 
 class Guild(GuildPreview):
 
@@ -72,3 +80,45 @@ class Guild(GuildPreview):
         self.public_updates_channel_id = kwargs.get('public_updates_channel_id')
         self.embed_enabled = kwargs.get('embed_enabled')
         self.embed_channel_id = kwargs.get('embed_channel_id')
+
+class WelcomeScreen:
+
+    """
+    Model depicting a Discord welcome screen object.
+    """
+
+    __slots__ = (
+        'description', 'channels'
+    )
+
+    def __init__(self, **kwargs):
+        self.description = kwargs.get('description')
+        self.channels = [WelcomeChannel(**c) for c in kwargs.get('welcome_channels', [])]
+
+    def __str__(self) -> str:
+        return f'<{type(self).__name__} description={self.description}, channels={len(self.channels)}>'
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
+class WelcomeChannel:
+
+    """
+    Model depicting a Discord welcome screen channel object.
+    """
+
+    __slots__ = (
+        'channel_id', 'description', 'emoji_id', 'emoji_name'
+    )
+
+    def __init__(self, **kwargs):
+        self.channel_id = kwargs.get('channel_id')
+        self.description = kwargs.get('description')
+        self.emoji_id = kwargs.get('emoji_id')
+        self.emoji_name = kwargs.get('emoji_name')
+
+    def __str__(self) -> str:
+        return f'<{type(self).__name__} channel_id={self.channel_id}, description={self.description}>'
+
+    def __repr__(self) -> str:
+        return self.__str__()

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from .user import User
+from .guild import GuildPreview
 
 __all__ = (
     'Invite'
@@ -15,7 +16,7 @@ class Invite:
 
     def __init__(self, **kwargs):
         self.code = kwargs.get('code')
-        self.guild = kwargs.get('guild')
+        self.guild = GuildPreview(**kwargs.get('guild'))
         self.channel = kwargs.get('channel')
 
         inviter = kwargs.get('inviter')
