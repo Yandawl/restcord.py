@@ -282,7 +282,7 @@ class ChannelClient(HTTPClient):
 
         return [User(**user) for user in users]
 
-    async def delete_all_reactions(self, channel_id: int, message_id: int:
+    async def delete_all_reactions(self, channel_id: int, message_id: int):
         """|coro|
         Deletes all reactions on a message.
 
@@ -332,3 +332,62 @@ class ChannelClient(HTTPClient):
             raise ValueError("Argument cannot be None: emoji")
 
         await self._request(Route('DELETE', f'/channels/{channel_id}/messages/{message_id}/reactions/{emoji}'))
+
+    async def delete_message(self, channel_id: int, message_id: int):
+        """|coro|
+        Deletes a message.
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/channel#delete-message
+
+        Parameters
+        ----------
+        channel_id: :class:`int`
+            Discord's identifier for the channel.
+        message_id: :class:`int`
+            Discord's identifier for the message.
+        """
+        if not channel_id:
+            raise ValueError("Argument cannot be None: channel_id")
+
+        if not message_id:
+            raise ValueError("Argument cannot be None: message_id")
+
+        await self._request(Route('DELETE', f'/channels/{channel_id}/messages/{message_id}'))
+
+    async def bulk_delete_messages(self, channel_id: int, message_ids: List[int]):
+        """|coro|
+        Bulk deletes message from a channel. Minimum 2, maximum 100.
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/channel#bulk-delete-messages
+
+        Parameters
+        ----------
+        channel_id: :class:`int`
+            Discord's identifier for the channel.
+        message_ids: :class:`int`
+            Discord's identifier for the message.
+
+        Raises
+        ----------
+        BadRequest
+            If duplicate message ids are provided or if a message is older than 2 weeks.
+        """
+        if not channel_id:
+            raise ValueError("Argument cannot be None: channel_id")
+
+        if not message_ids:
+            raise ValueError("Argument cannot be None: message_ids")
+
+        length = len(message_ids)
+        if length < 2 or length > 100:
+            raise ValueError("List length must be at least 2 and no greater than 100: message_ids")
+
+        params = {
+            'messages': message_ids
+        }
+
+        await self._request(Route('POST', f'/channels/{channel_id}/messages/bulk-delete'), params=params)
