@@ -169,6 +169,67 @@ class ChannelClient(HTTPClient):
 
         await self._request(Route('PUT', f'/channels/{channel_id}/messages/{message_id}/reactions/{emoji}/@me'))
 
+    async def delete_reaction(self, channel_id: int, message_id: int, emoji: str):
+        """|coro|
+        Deletes a reaction this application has added to a message.
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/channel#delete-own-reaction
+
+        Parameters
+        ----------
+        channel_id: :class:`int`
+            Discord's identifier for the channel.
+        message_id: :class:`int`
+            Discord's identifier for the message.
+        emoji: :class:`str`
+            The URL encoded emoji
+        """
+        if not channel_id:
+            raise ValueError("Argument cannot be None: channel_id")
+
+        if not message_id:
+            raise ValueError("Argument cannot be None: message_id")
+
+        if not emoji:
+            raise ValueError("Argument cannot be None: emoji")
+
+        await self._request(Route('DELETE', f'/channels/{channel_id}/messages/{message_id}/reactions/{emoji}/@me'))
+
+    async def delete_user_reaction(self, channel_id: int, message_id: int, emoji: str, user_id: int):
+        """|coro|
+        Deletes a reaction a user has added to a message.
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/channel#delete-user-reaction
+
+        Parameters
+        ----------
+        channel_id: :class:`int`
+            Discord's identifier for the channel.
+        message_id: :class:`int`
+            Discord's identifier for the message.
+        emoji: :class:`str`
+            The URL encoded emoji
+        user_id: :class:`int`
+            Discord's identifier for the user.
+        """
+        if not channel_id:
+            raise ValueError("Argument cannot be None: channel_id")
+
+        if not message_id:
+            raise ValueError("Argument cannot be None: message_id")
+
+        if not emoji:
+            raise ValueError("Argument cannot be None: emoji")
+
+        if not user_id:
+            raise ValueError("Argument cannot be None: user_id")
+
+        await self._request(Route('DELETE', f'/channels/{channel_id}/messages/{message_id}/reactions/{emoji}/{user_id}'))
+
     async def get_reactions(self, channel_id: int, message_id: int, emoji: str, before=None, after=None, limit=25) -> List[User]:
         """|coro|
         Get a list of users who have reacted to this message with the emoji.
@@ -220,3 +281,54 @@ class ChannelClient(HTTPClient):
         users = await self._request(Route('GET', f'/channels/{channel_id}/messages/{message_id}/reactions/{emoji}'), params=params)
 
         return [User(**user) for user in users]
+
+    async def delete_all_reactions(self, channel_id: int, message_id: int:
+        """|coro|
+        Deletes all reactions on a message.
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/channel#delete-all-reactions
+
+        Parameters
+        ----------
+        channel_id: :class:`int`
+            Discord's identifier for the channel.
+        message_id: :class:`int`
+            Discord's identifier for the message.
+        """
+        if not channel_id:
+            raise ValueError("Argument cannot be None: channel_id")
+
+        if not message_id:
+            raise ValueError("Argument cannot be None: message_id")
+
+        await self._request(Route('DELETE', f'/channels/{channel_id}/messages/{message_id}/reactions'))
+
+    async def delete_all_reactions_for_emoji(self, channel_id: int, message_id: int, emoji: str):
+        """|coro|
+        Deletes all reactions for an emoji on a message
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/channel#delete-own-reaction
+
+        Parameters
+        ----------
+        channel_id: :class:`int`
+            Discord's identifier for the channel.
+        message_id: :class:`int`
+            Discord's identifier for the message.
+        emoji: :class:`str`
+            The URL encoded emoji
+        """
+        if not channel_id:
+            raise ValueError("Argument cannot be None: channel_id")
+
+        if not message_id:
+            raise ValueError("Argument cannot be None: message_id")
+
+        if not emoji:
+            raise ValueError("Argument cannot be None: emoji")
+
+        await self._request(Route('DELETE', f'/channels/{channel_id}/messages/{message_id}/reactions/{emoji}'))
