@@ -8,9 +8,7 @@ __all__ = (
 
 class VoiceRegion(Designation):
 
-    """
-    Model depicting a Discord voice region object.
-    """
+    """Model depicting a Discord voice region object."""
 
     __slots__ = ('vip', 'optimal', 'deprecated', 'custom')
 

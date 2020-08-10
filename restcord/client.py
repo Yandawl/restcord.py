@@ -10,6 +10,7 @@ from .guild_client import GuildClient
 from .invite_client import InviteClient
 from .user_client import UserClient
 from .voice_client import VoiceClient
+from .webhook_client import WebhookClient
 
 __log__ = logging.getLogger(__name__)
 
@@ -19,8 +20,7 @@ __all__ = (
 
 
 class RestCord:
-    """
-    Asynchronous Python client for communicating with Discord's API.
+    """Asynchronous Python client for communicating with Discord's API.
 
     Parameters
     ------------
@@ -30,7 +30,7 @@ class RestCord:
         Optionally include your aiohttp session
     """
 
-    __slots__ = ('channel_client', 'emoji_client', 'guild_client', 'invite_client', 'user_client', 'voice_client')
+    __slots__ = ('channel_client', 'emoji_client', 'guild_client', 'invite_client', 'user_client', 'voice_client', 'webhook_client')
 
     def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession] = None) -> None:
         self.channel_client = ChannelClient(token, loop, proxy, proxy_auth, session)
@@ -39,6 +39,7 @@ class RestCord:
         self.invite_client = InviteClient(token, loop, proxy, proxy_auth, session)
         self.user_client = UserClient(token, loop, proxy, proxy_auth, session)
         self.voice_client = VoiceClient(token, loop, proxy, proxy_auth, session)
+        self.webhook_client = WebhookClient(token, loop, proxy, proxy_auth, session)
 
     async def __aenter__(self):
         return self
@@ -53,3 +54,4 @@ class RestCord:
         await self.invite_client.close()
         await self.user_client.close()
         await self.voice_client.close()
+        await self.webhook_client.close()

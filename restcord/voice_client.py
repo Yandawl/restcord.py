@@ -15,13 +15,23 @@ __all__ = (
 
 
 class VoiceClient(HTTPClient):
+    """HTTPClient for interacting with Discord's Voice API
+
+    API Documentation
+    ----------
+        https://discord.com/developers/docs/resources/voice
+
+    Parent
+    ----------
+    HTTPClient: :class:`HTTPClient`
+        The class that handles the HTTP requests and responses including rate limit handling and HTTP status codes.
+    """
 
     def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession] = None) -> None:
         super().__init__(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
 
     async def get_voice_regions(self) -> List[VoiceRegion]:
-        """|coro|
-        Get a list of voice regions.
+        """|coro| Get a list of voice regions.
 
         Returns
         ---------

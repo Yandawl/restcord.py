@@ -13,9 +13,7 @@ __all__ = (
 
 class GuildPreview(Designation):
 
-    """
-    Model depicting a Discord guild object.
-    """
+    """Model depicting a Discord guild object."""
 
     __slots__ = (
         'icon', 'splash', 'discovery_splash', 'features', 'emojis', 'approximate_member_count', 'approximate_presence_count', 'description', 'welcome_screen'
@@ -42,9 +40,7 @@ class GuildPreview(Designation):
 
 class Guild(GuildPreview):
 
-    """
-    Model depicting a Discord guild object.
-    """
+    """Model depicting a Discord guild object."""
 
     __slots__ = (
         'owner_id', 'application_id', 'region', 'banner', 'afk_channel_id', 'afk_timeout',
@@ -86,9 +82,7 @@ class Guild(GuildPreview):
 
 class WelcomeScreen:
 
-    """
-    Model depicting a Discord welcome screen object.
-    """
+    """Model depicting a Discord welcome screen object."""
 
     __slots__ = (
         'description', 'channels'
@@ -107,9 +101,7 @@ class WelcomeScreen:
 
 class WelcomeChannel:
 
-    """
-    Model depicting a Discord welcome screen channel object.
-    """
+    """Model depicting a Discord welcome screen channel object."""
 
     __slots__ = (
         'channel_id', 'description', 'emoji_id', 'emoji_name'

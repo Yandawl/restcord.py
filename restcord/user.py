@@ -8,9 +8,7 @@ __all__ = (
 
 class User(Designation):
 
-    """
-    Model depicting a Discord user object.
-    """
+    """Model depicting a Discord user object."""
 
     __slots__ = ('discriminator', 'avatar', 'public_flags')
 

@@ -15,13 +15,23 @@ __all__ = (
 
 
 class EmojiClient(HTTPClient):
+    """ HTTPClient for interacting with Discord's Emoji API
+
+    API Documentation
+    ----------
+        https://discord.com/developers/docs/resources/emoji
+
+    Parent
+    ----------
+    HTTPClient: :class:`HTTPClient`
+        The class that handles the HTTP requests and responses including rate limit handling and HTTP status codes.
+    """
 
     def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession] = None) -> None:
         super().__init__(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
 
     async def get_emoji(self, guild_id: int, emoji_id: int) -> Emoji:
-        """|coro|
-        Get a guild emoji.
+        """|coro| Get a guild emoji.
 
         Returns
         ---------
@@ -50,8 +60,7 @@ class EmojiClient(HTTPClient):
         return Emoji(**emoji)
 
     async def get_emojis(self, guild_id: int) -> List[Emoji]:
-        """|coro|
-        Get a guild's emojis.
+        """|coro| Get a guild's emojis.
 
         Returns
         ---------
@@ -75,8 +84,7 @@ class EmojiClient(HTTPClient):
         return [Emoji(**emojis) for emoji in emojis]
 
     async def delete_emoji(self, guild_id: int, emoji_id: int):
-        """|coro|
-        Deletes an emoji from a guild.
+        """|coro| Deletes an emoji from a guild.
 
         API Documentation
         ----------
