@@ -15,9 +15,7 @@ __all__ = (
 
 
 class UserClient(HTTPClient):
-
-    """
-    HTTPClient for interacting with Discord's User API
+    """HTTPClient for interacting with Discord's User API
 
     API Documentation
     ----------
@@ -33,8 +31,7 @@ class UserClient(HTTPClient):
         super().__init__(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
 
     async def get_user(self, user_id: int) -> User:
-        """|coro|
-        Get a user.
+        """|coro| Get a user.
 
         Returns
         ---------

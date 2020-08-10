@@ -15,9 +15,7 @@ __all__ = (
 
 
 class VoiceClient(HTTPClient):
-
-    """
-    HTTPClient for interacting with Discord's Voice API
+    """HTTPClient for interacting with Discord's Voice API
 
     API Documentation
     ----------
@@ -33,8 +31,7 @@ class VoiceClient(HTTPClient):
         super().__init__(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
 
     async def get_voice_regions(self) -> List[VoiceRegion]:
-        """|coro|
-        Get a list of voice regions.
+        """|coro| Get a list of voice regions.
 
         Returns
         ---------

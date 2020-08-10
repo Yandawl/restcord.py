@@ -15,9 +15,7 @@ __all__ = (
 
 
 class WebhookClient(HTTPClient):
-
-    """
-    HTTPClient for interacting with Discord's Webhooks API
+    """HTTPClient for interacting with Discord's Webhooks API
 
     API Documentation
     ----------
@@ -33,8 +31,7 @@ class WebhookClient(HTTPClient):
         super().__init__(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
 
     async def get_webhook(self, webhook_id: int) -> Webhook:
-        """|coro|
-        Get a webhook.
+        """|coro| Get a webhook.
 
         Returns
         ---------
@@ -58,8 +55,7 @@ class WebhookClient(HTTPClient):
         return Webhook(**webhook)
 
     async def get_webhook_with_token(self, webhook_id: int, token: str) -> Webhook:
-        """|coro|
-        Get a webhook with token.
+        """|coro| Get a webhook with token.
 
         Returns
         ---------
@@ -88,8 +84,7 @@ class WebhookClient(HTTPClient):
         return Webhook(**webhook)
 
     async def get_channel_webhooks(self, channel_id: int) -> List[Webhook]:
-        """|coro|
-        Get a list of a channel's webhooks.
+        """|coro| Get a list of a channel's webhooks.
 
         Returns
         ---------
@@ -113,8 +108,7 @@ class WebhookClient(HTTPClient):
         return [Webhook(**webhook) for webhook in webhooks]
 
     async def get_guild_webhooks(self, guild_id: int) -> List[Webhook]:
-        """|coro|
-        Get a list of a guild's webhooks.
+        """|coro| Get a list of a guild's webhooks.
 
         Returns
         ---------
@@ -138,8 +132,7 @@ class WebhookClient(HTTPClient):
         return [Webhook(**webhook) for webhook in webhooks]
 
     async def delete_webhook(self, webhook_id: int) -> None:
-        """|coro|
-        Deletes a webhook.
+        """|coro| Deletes a webhook.
 
         API Documentation
         ----------
@@ -156,8 +149,7 @@ class WebhookClient(HTTPClient):
         await self._request(Route('DELETE', f'/webhooks/{webhook_id}'))
 
     async def delete_webhook_with_token(self, webhook_id: int, token: str) -> None:
-        """|coro|
-        Deletes a webhook with token.
+        """|coro| Deletes a webhook with token.
 
         API Documentation
         ----------

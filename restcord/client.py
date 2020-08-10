@@ -20,8 +20,7 @@ __all__ = (
 
 
 class RestCord:
-    """
-    Asynchronous Python client for communicating with Discord's API.
+    """Asynchronous Python client for communicating with Discord's API.
 
     Parameters
     ------------

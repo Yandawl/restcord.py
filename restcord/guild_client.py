@@ -19,9 +19,7 @@ __all__ = (
 
 
 class GuildClient(HTTPClient):
-
-    """
-    HTTPClient for interacting with Discord's Guild API
+    """HTTPClient for interacting with Discord's Guild API
 
     API Documentation
     ----------
@@ -37,8 +35,7 @@ class GuildClient(HTTPClient):
         super().__init__(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
 
     async def get_guild(self, guild_id: int, with_counts=False) -> Guild:
-        """|coro|
-        Get a guild.
+        """|coro| Get a guild.
 
         Returns
         ---------
@@ -69,8 +66,7 @@ class GuildClient(HTTPClient):
         return Guild(**guild)
 
     async def get_guild_preview(self, guild_id: int) -> GuildPreview:
-        """|coro|
-        Get a guild preview.
+        """|coro| Get a guild preview.
 
         Returns
         ---------
@@ -94,8 +90,7 @@ class GuildClient(HTTPClient):
         return GuildPreview(**guild)
 
     async def get_member(self, guild_id: int, member_id: int) -> Member:
-        """|coro|
-        Get a guild's member.
+        """|coro| Get a guild's member.
 
         Returns
         ---------
@@ -124,8 +119,7 @@ class GuildClient(HTTPClient):
         return Member(**member)
 
     async def get_members(self, guild_id: int, limit: int = 1, after_id: int = 0) -> List[Member]:
-        """|coro|
-        Get a list of a guild's members.
+        """|coro| Get a list of a guild's members.
 
         Returns
         ---------
@@ -160,8 +154,7 @@ class GuildClient(HTTPClient):
         return [Member(**member) for member in members]
 
     async def get_channels(self, guild_id: int) -> List[Channel]:
-        """|coro|
-        Get a list of a guild's channels.
+        """|coro| Get a list of a guild's channels.
 
         Returns
         ---------
@@ -185,8 +178,7 @@ class GuildClient(HTTPClient):
         return [Channel(**channel) for channel in channels]
 
     async def get_roles(self, guild_id: int) -> List[Role]:
-        """|coro|
-        Get a list of a guild's roles.
+        """|coro| Get a list of a guild's roles.
 
         Returns
         ---------
@@ -210,8 +202,7 @@ class GuildClient(HTTPClient):
         return [Role(**role) for role in roles]
 
     async def get_ban(self, guild_id: int, user_id: int) -> Ban:
-        """|coro|
-        Get a guild ban.
+        """|coro| Get a guild ban.
 
         Returns
         ---------
@@ -247,8 +238,7 @@ class GuildClient(HTTPClient):
         return Ban(**ban)
 
     async def get_bans(self, guild_id: int) -> List[Ban]:
-        """|coro|
-        Get a guild's bans.
+        """|coro| Get a guild's bans.
 
         Returns
         ---------
