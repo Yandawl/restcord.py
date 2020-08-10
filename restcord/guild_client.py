@@ -17,9 +17,10 @@ __all__ = (
     'GuildClient'
 )
 
+
 class GuildClient(HTTPClient):
 
-    def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession]=None) -> None:
+    def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession] = None) -> None:
         super().__init__(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
 
     async def get_guild(self, guild_id: int, with_counts=False) -> Guild:
@@ -109,7 +110,7 @@ class GuildClient(HTTPClient):
 
         return Member(**member)
 
-    async def get_members(self, guild_id: int, limit: int=1, after_id: int=0) -> List[Member]:
+    async def get_members(self, guild_id: int, limit: int = 1, after_id: int = 0) -> List[Member]:
         """|coro|
         Get a list of a guild's members.
 

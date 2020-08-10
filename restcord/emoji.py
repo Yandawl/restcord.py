@@ -6,6 +6,7 @@ __all__ = (
     'Emoji'
 )
 
+
 class Emoji(Designation):
 
     """

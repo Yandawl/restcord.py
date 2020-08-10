@@ -27,6 +27,7 @@ __all__ = (
     'HTTPClient'
 )
 
+
 class Route:
 
     BASE = 'https://discord.com/api'
@@ -36,11 +37,12 @@ class Route:
         self.method = method
         self.url = (self.BASE + self.path)
 
+
 class HTTPClient:
 
     __slots__ = ('token', 'loop', 'proxy', 'proxy_auth', '__session', '__agent')
 
-    def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession]=None) -> None:
+    def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession] = None) -> None:
         self.token = token
         self.loop = asyncio.get_event_loop() if loop is None else loop
         self.proxy = proxy

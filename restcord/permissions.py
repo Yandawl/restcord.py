@@ -5,6 +5,7 @@ __all__ = (
     'PermissionOverwrite'
 )
 
+
 class PermissionOverwrite(Snowflake):
 
     __slots__ = ('type', 'allow', 'deny', 'allow_new', 'deny_new')
