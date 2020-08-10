@@ -9,9 +9,7 @@ __all__ = (
 
 class Webhook(Designation):
 
-    """
-    Model depicting a Discord webhook object.
-    """
+    """Model depicting a Discord webhook object."""
 
     __slots__ = ('type', 'guild_id', 'channel_id', 'avatar', 'token', 'user')
 

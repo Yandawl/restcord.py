@@ -18,6 +18,7 @@ __all__ = (
 
 
 class ChannelClient(HTTPClient):
+
     """HTTPClient for interacting with Discord's Channel API
 
     API Documentation

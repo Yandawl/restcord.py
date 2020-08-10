@@ -9,9 +9,7 @@ __all__ = (
 
 class Channel(Designation):
 
-    """
-    Model depicting a Discord channel object.
-    """
+    """Model depicting a Discord channel object."""
 
     __slots__ = ('guild_id', 'type', 'position', 'permission_overwrites', 'parent_id', 'last_message_id', 'last_pin_timestamp', 'topic', 'nsfw', 'permission_overwrites')
 

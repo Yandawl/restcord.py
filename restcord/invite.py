@@ -9,9 +9,7 @@ __all__ = (
 
 class Invite:
 
-    """
-    Model depicting a Discord invite object.
-    """
+    """Model depicting a Discord invite object."""
 
     __slots__ = ('code', 'guild', 'channel', 'inviter', 'target_user', 'target_user_type', 'approximate_presence_count', 'approximate_member_count')
 
