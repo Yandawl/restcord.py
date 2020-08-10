@@ -9,9 +9,7 @@ __all__ = (
 
 class Emoji(Designation):
 
-    """
-    Model depicting a Discord emoji object.
-    """
+    """Model depicting a Discord emoji object."""
 
     __slots__ = ('roles', 'require_colons', 'managed', 'animated', 'available', 'user')
 

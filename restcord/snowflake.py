@@ -8,9 +8,8 @@ __all__ = (
 
 
 class Snowflake(ABC):
-    """
-    Abstract base class depicting a Discord object that has an ID.
-    """
+
+    """Abstract base class depicting a Discord object that has an ID."""
 
     __slots__ = ('id')
 
@@ -28,9 +27,8 @@ class Snowflake(ABC):
 
 
 class Designation(Snowflake):
-    """
-    An extention to the Snowflake abstract base class depicting a Discord object that has a name.
-    """
+
+    """An extention to the Snowflake abstract base class depicting a Discord object that has a name."""
 
     __slots__ = ('name')
 

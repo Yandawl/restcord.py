@@ -11,6 +11,8 @@ __all__ = (
 
 class Message(Snowflake):
 
+    """Model depicting a Discord message object."""
+
     __slots__ = ('channel_id', 'type', 'content', 'author', 'pinned', 'tts', 'mention_everyone', 'timestamp', 'edited_timestamp')
 
     def __init__(self, **kwargs):

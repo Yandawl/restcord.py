@@ -24,3 +24,4 @@ from .message import Message
 from .role import Role
 from .user import User
 from .voice import VoiceRegion
+from .webhook import Webhook

@@ -8,9 +8,7 @@ __all__ = (
 
 class Role(Designation):
 
-    """
-    Model depicting a Discord role object.
-    """
+    """Model depicting a Discord role object."""
 
     __slots__ = ('permissions', 'position', 'color', 'hoist', 'managed', 'mentionable', 'permissions_new')
 

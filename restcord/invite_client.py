@@ -15,13 +15,23 @@ __all__ = (
 
 
 class InviteClient(HTTPClient):
+    """HTTPClient for interacting with Discord's Invite API
+
+    API Documentation
+    ----------
+        https://discord.com/developers/docs/resources/invite
+
+    Parent
+    ----------
+    HTTPClient: :class:`HTTPClient`
+        The class that handles the HTTP requests and responses including rate limit handling and HTTP status codes.
+    """
 
     def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession] = None) -> None:
         super().__init__(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
 
     async def get_invite(self, invite_code: str, with_counts=False) -> Invite:
-        """|coro|
-        Gets an invite.
+        """|coro| Gets an invite.
 
         Returns
         ---------
@@ -52,8 +62,7 @@ class InviteClient(HTTPClient):
         return Invite(**invite)
 
     async def delete_invite(self, invite_code: str) -> Invite:
-        """|coro|
-        Deletes an invite.
+        """|coro| Deletes an invite.
 
         Returns
         ---------
