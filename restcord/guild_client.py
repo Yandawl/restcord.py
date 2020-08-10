@@ -20,6 +20,19 @@ __all__ = (
 
 class GuildClient(HTTPClient):
 
+    """
+    HTTPClient for interacting with Discord's Guild API
+
+    API Documentation
+    ----------
+        https://discord.com/developers/docs/resources/guild
+
+    Parent
+    ----------
+    HTTPClient: :class:`HTTPClient`
+        The class that handles the HTTP requests and responses including rate limit handling and HTTP status codes.
+    """
+
     def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession] = None) -> None:
         super().__init__(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
 
