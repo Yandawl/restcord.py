@@ -6,6 +6,7 @@ from aiohttp import ClientSession
 
 from .channel import Channel
 from .http import HTTPClient, Route
+from .invite import Invite
 from .message import Message
 from .user import User
 
@@ -391,3 +392,78 @@ class ChannelClient(HTTPClient):
         }
 
         await self._request(Route('POST', f'/channels/{channel_id}/messages/bulk-delete'), params=params)
+
+    async def get_invites(self, channel_id: int) -> List[Invite]:
+        """|coro|
+        Get a list of a channel's invites.
+
+        Returns
+        ---------
+        List[:class:`Invite`]:
+            The list of Invites.
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/channel#get-channel-invites
+
+        Parameters
+        ----------
+        channel_id: :class:`int`
+            Discord's identifier for the channel.
+        """
+        if not channel_id:
+            raise ValueError("Argument cannot be None: channel_id")
+
+        invites = await self._request(Route('GET', f'/channels/{channel_id}/invites'))
+
+        return [Invite(**invite) for invite in invites]
+
+    async def create_invite(self, channel_id: int, max_age: int = 86400, max_uses: int = 0, temporary=False, unique=False, target_user=None, target_user_type=None) -> Invite:
+        """|coro|
+        Creates a new invite object for the channel.
+
+        Returns
+        ---------
+        :class:`Invite`:
+            The invite that was created for the channel.
+
+        API Documentation
+        ----------
+            https://discord.com/developers/docs/resources/channel#create-channel-invite
+
+        Parameters
+        ----------
+        channel_id: :class:`int`
+            Discord's identifier for the channel.
+        max_age: :class:`int`
+            Duration of invite in seconds before expiry, or 0 for never.
+        max_uses: :class:`str`
+            Maximum number of uses or 0 for unlimited.
+        temporary: :class:`bool`
+            Whether this invite only grants temporary membership.
+        unique: :class:`bool`
+            If true, don't try to reuse a similar invite (useful for creating many unique one time use invites).
+        target_user: Optional[:class:`str`]
+            The target user id for this invite.
+        target_user_type: Optional[:class:`str`]
+            The type of target user for this invite
+        """
+        if not channel_id:
+            raise ValueError("Argument cannot be None: channel_id")
+
+        params = {
+            'max_age': max_age,
+            'max_uses': max_uses,
+            'temporary': temporary,
+            'unique': unique
+        }
+
+        if target_user is not None:
+            params['target_user'] = target_user
+
+        if target_user_type is not None:
+            params['target_user_type'] = target_user_type
+
+        invite = await self._request(Route('POST', f'/channels/{channel_id}/invites'), params=params)
+
+        return Invite(**invite)
