@@ -8,6 +8,7 @@ __all__ = (
     'Message'
 )
 
+
 class Message(Snowflake):
 
     __slots__ = ('channel_id', 'type', 'content', 'author', 'pinned', 'tts', 'mention_everyone', 'timestamp', 'edited_timestamp')

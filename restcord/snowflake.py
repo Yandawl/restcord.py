@@ -6,6 +6,7 @@ __all__ = (
     'Designation'
 )
 
+
 class Snowflake(ABC):
     """
     Abstract base class depicting a Discord object that has an ID.
@@ -24,6 +25,7 @@ class Snowflake(ABC):
 
     def __eq__(self, other) -> bool:
         return self.id == other.id
+
 
 class Designation(Snowflake):
     """

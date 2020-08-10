@@ -6,6 +6,7 @@ __all__ = (
     'Invite'
 )
 
+
 class Invite:
 
     """

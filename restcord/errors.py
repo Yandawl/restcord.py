@@ -23,6 +23,7 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 """
 
+
 class HTTPException(Exception):
 
     """Exception that's thrown when an HTTP request operation fails.
@@ -84,15 +85,18 @@ class BadRequest(HTTPException):
     """Exception that's thrown for when status code 400 occurs."""
     pass
 
+
 class Forbidden(HTTPException):
 
     """Exception that's thrown for when status code 403 occurs."""
     pass
 
+
 class NotFound(HTTPException):
 
     """Exception that's thrown for when status code 404 occurs."""
     pass
+
 
 class RateLimited(HTTPException):
 
@@ -106,10 +110,12 @@ class RateLimited(HTTPException):
         self.retry_after = message['retry_after'] / 1000.0
         self.is_global = message.get('global', False)
 
+
 class InternalServerError(HTTPException):
 
     """Exception that's thrown for when status code 500 occurs."""
     pass
+
 
 class BadGateway(HTTPException):
 

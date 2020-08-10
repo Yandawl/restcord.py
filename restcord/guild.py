@@ -10,6 +10,7 @@ __all__ = (
     'WelcomeChannel'
 )
 
+
 class GuildPreview(Designation):
 
     """
@@ -37,6 +38,7 @@ class GuildPreview(Designation):
             self.welcome_screen = WelcomeScreen(**welcome_screen)
         else:
             self.welcome_screen = None
+
 
 class Guild(GuildPreview):
 
@@ -81,6 +83,7 @@ class Guild(GuildPreview):
         self.embed_enabled = kwargs.get('embed_enabled')
         self.embed_channel_id = kwargs.get('embed_channel_id')
 
+
 class WelcomeScreen:
 
     """
@@ -100,6 +103,7 @@ class WelcomeScreen:
 
     def __repr__(self) -> str:
         return self.__str__()
+
 
 class WelcomeChannel:
 

@@ -13,9 +13,10 @@ __all__ = (
     'VoiceClient'
 )
 
+
 class VoiceClient(HTTPClient):
 
-    def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession]=None) -> None:
+    def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession] = None) -> None:
         super().__init__(token=token, loop=loop, proxy=proxy, proxy_auth=proxy_auth, session=session)
 
     async def get_voice_regions(self) -> List[VoiceRegion]:

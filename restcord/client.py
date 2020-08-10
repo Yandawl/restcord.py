@@ -17,6 +17,7 @@ __all__ = (
     'RestCord'
 )
 
+
 class RestCord:
     """
     Asynchronous Python client for communicating with Discord's API.
@@ -31,7 +32,7 @@ class RestCord:
 
     __slots__ = ('channel_client', 'emoji_client', 'guild_client', 'invite_client', 'user_client', 'voice_client')
 
-    def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession]=None) -> None:
+    def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession] = None) -> None:
         self.channel_client = ChannelClient(token, loop, proxy, proxy_auth, session)
         self.emoji_client = EmojiClient(token, loop, proxy, proxy_auth, session)
         self.guild_client = GuildClient(token, loop, proxy, proxy_auth, session)

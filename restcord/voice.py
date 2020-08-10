@@ -5,6 +5,7 @@ __all__ = (
     'VoiceRegion'
 )
 
+
 class VoiceRegion(Designation):
 
     """

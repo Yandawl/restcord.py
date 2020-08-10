@@ -7,6 +7,7 @@ __all__ = (
     'Member'
 )
 
+
 class Member(User):
     """
     Model depicting a Discord member object.

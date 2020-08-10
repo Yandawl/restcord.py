@@ -15,6 +15,7 @@ __all__ = (
     'ChannelClient'
 )
 
+
 class ChannelClient(HTTPClient):
 
     def __init__(self, token: str, loop=None, proxy=None, proxy_auth=None, session: Optional[ClientSession] = None) -> None:
